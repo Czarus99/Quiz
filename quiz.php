@@ -15,7 +15,7 @@
         
         
         
-        <div>
+        <div class="pytanie">
         <?php
             $con = new mysqli("localhost", "root", "", "quiz");
             $ile = $con->query("Select count(id) FROM pytania");
@@ -30,8 +30,8 @@
                     
                 }
             ?>
-            
-            
+        </div>
+        <div>
             
             <?php
             $odp = $con->query("SELECT `id`, `Treść` FROM `odpowiedzi` 
@@ -40,7 +40,7 @@
             
             $wypodp = $odp->fetch_all(MYSQLI_ASSOC);
                 for($i=0; $i<count($wypodp); $i++){
-                    echo $wypodp[$i]["Treść"]."<br>";
+                    echo "<button>".$wypodp[$i]["Treść"]."</button><br>";
                 }
                 
             
