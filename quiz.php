@@ -21,7 +21,7 @@
             $ile = $con->query("Select count(id) FROM pytania");
             $max = $ile->fetch_array()[0];
             $los = rand(1, $max);
-    //        if isset($_POST)
+            // if isset($_POST)
             
             
             $zap = $con->query("Select id, treść FROM pytania WHERE id=$los");
@@ -43,7 +43,7 @@
             echo '<input type="hidden" name="questionid" value="'.$los.'"/>';
             $wypodp = $odp->fetch_all(MYSQLI_ASSOC);
                 for($i=0; $i<count($wypodp); $i++){
-                    echo '<label><input type="checkbox" name="'.$wypodp[$i]["id"].'">'.$wypodp[$i]["Treść"]."</label><br>";
+                    echo '<label><input type="checkbox" name="idodpowiedzi" value="'.$wypodp[$i]["id"].'">'.$wypodp[$i]["Treść"]."</label><br>";
                 }
             echo '<input type="submit">';
             echo '</form>';
