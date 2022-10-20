@@ -21,44 +21,60 @@
             $ile = $con->query("Select count(id) FROM pytania");
             $max = $ile->fetch_array()[0];
             $pytania=[];
-            if (isset($_POST["pytania"])){
-                $pytania=$_POST["pytania"];
+            $odpowiedzi=[];
+            $index=0;
+            
+            if (isset($_POST["quest"]) && isset($_POST["index"]) && isset($_POST["odpowiedzi"])){
+                $pytania=unserialize($_POST["quest"]);
+                $index = $_POST["index"];
+                $odpowiedzi = unserialize($_POST["odpowiedzi"]);
+                
             }
             else {
-                $los = rand(1, $max);
                 while(count($pytania)<5){
-                    if($pytania)
-                }
+                    $los = rand(1, $max);
+                    if(!in_array($los, $pytania)){
+                        $pytania[] = $los;
+                        
+                        }
+                }     
             }
-            
-            $zap = $con->query("Select id, treść FROM pytania WHERE id=$los");
+            if($index>=5){
+                echo "$pop";
+            }
+            else{
+            $zap = $con->query("Select id, treść FROM pytania WHERE id=".$pytania[$index].";");
             $wyp = $zap->fetch_all(MYSQLI_ASSOC);
                 for($i=0;$i<count($wyp); $i++){
                     echo $wyp[$i]["treść"]."<br>";
                     
                 }
+            }
             ?>
         </div>
         <div>
             
             <?php
+            if($index<5){
             $odp = $con->query("SELECT `id`, `Treść` FROM `odpowiedzi` 
                                 JOIN pytania_has_odpowiedzi ON pytania_has_odpowiedzi.Odpowiedzi_id=odpowiedzi.id
-                                WHERE pytania_has_odpowiedzi.Pytania_id = $los");
-            
+                                WHERE pytania_has_odpowiedzi.Pytania_id =".$pytania[$index]."");
+            $pop = $con->query("SELECT `id`, `Treść` FROM `odpowiedzi` WHERE `poprawna`=1");
             echo '<form method="POST">';
-            echo '<input type="hidden" name="questionid" value="'.$los.'"/>';
+            echo '<input type="hidden" name="questionid" value="'.$pytania[$index].'">';
             $wypodp = $odp->fetch_all(MYSQLI_ASSOC);
                 for($i=0; $i<count($wypodp); $i++){
                     echo '<label><input type="checkbox" name="idodpowiedzi" value="'.$wypodp[$i]["id"].'">'.$wypodp[$i]["Treść"]."</label><br>";
-                }
-            echo '<input type="hidden" name="quest" value="'.serialize($pytania).'"/>';
+                }    
+            echo '<input type="hidden" name="odpowiedzi" value="'.serialize($odpowiedzi).'">';
+            echo '<input type="hidden" name="quest" value="'.serialize($pytania).'">';
+            echo '<input type="hidden" name="index" value="'.($index+1).'">';
             echo '<input type="submit">';
             echo '</form>';
                 
            
-            
-        print_r($_POST);
+            }
+        print_r($_POST["odpowiedzi"]);
          
             
         ?>
