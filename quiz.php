@@ -20,9 +20,16 @@
             $con = new mysqli("localhost", "root", "", "quiz");
             $ile = $con->query("Select count(id) FROM pytania");
             $max = $ile->fetch_array()[0];
-            $los = rand(1, $max);
-            // if isset($_POST)
-            
+            $pytania=[];
+            if (isset($_POST["pytania"])){
+                $pytania=$_POST["pytania"];
+            }
+            else {
+                $los = rand(1, $max);
+                while(count($pytania)<5){
+                    if($pytania)
+                }
+            }
             
             $zap = $con->query("Select id, treść FROM pytania WHERE id=$los");
             $wyp = $zap->fetch_all(MYSQLI_ASSOC);
@@ -45,6 +52,7 @@
                 for($i=0; $i<count($wypodp); $i++){
                     echo '<label><input type="checkbox" name="idodpowiedzi" value="'.$wypodp[$i]["id"].'">'.$wypodp[$i]["Treść"]."</label><br>";
                 }
+            echo '<input type="hidden" name="quest" value="'.serialize($pytania).'"/>';
             echo '<input type="submit">';
             echo '</form>';
                 
